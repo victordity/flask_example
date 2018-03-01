@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from os import path
+from random import randint
 
 
 def create_app():
@@ -30,7 +31,14 @@ def create_app():
 
     @app.route("/danilogs")
     def hello_danilo():
-        return "Hello world! by danilogs"
+
+        msg = [
+            'Hello world by Danilo',
+            "Message 2",
+            "I'm out of ideas already",
+            "Still writing something"
+        ]
+        return render_template("template_danilo", msg=msg[randint(0, len(msg)-1)])
 
     @app.route("/atosfm")
     def hello_atos():
