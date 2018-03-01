@@ -1,13 +1,28 @@
-from flask import Flask
+from flask import Flask, render_template
+from os import path
 
 
 def create_app():
-    app = Flask("training")
+    instance_path = path.join(
+        path.abspath(path.dirname(__file__))
+    )
+    print(instance_path)
+    app = Flask(
+        __name__,
+        instance_path=instance_path,
+        instance_relative_config=True
+    )
     app.config.from_object("app.settings")
 
     @app.route("/")
     def hello():
-        return "Hello World! pyntonistas222"
+        interns = [
+            ("Victor1", "/victor1"),
+            ("Danilo", "/danilogs"),
+            ("Atos", "/atosfm"),
+            ("Victor2", "/victordity")
+        ]
+        return render_template("index.html", interns=interns)
 
     @app.route("/victor1")
     def zelda():

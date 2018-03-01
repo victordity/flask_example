@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index Example</title>
+</head>
+<body>
+    <ul>
+        {% for intern, url in interns %}
+            <li>
+                <a href="{{url}}"><span style="font-size: 25px; color: red;">{{intern}}</span></a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
