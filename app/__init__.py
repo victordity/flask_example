@@ -9,8 +9,23 @@ def create_app():
     def hello():
         return "Hello World! pyntonistas222"
 
+    @app.route("/victor1")
+    def zelda():
+        return "It's dangerous to go alone! Take This O---{:::::::::::::::>"
+
+    @app.route("/danilogs")
+    def hello_danilo():
+        return "Hello world! by danilogs"
+
+    @app.route("/atosfm")
+    def hello_atos():
+        return "Hello Atos! Welcome"
+
     @app.route("/victordity")
     def hellovictor():
         return "Mensagem adicionada por Victor Hugo"
 
+
     return app
+
+
