@@ -1,11 +1,7 @@
 from flask import Flask, render_template
 from os import path
-<<<<<<< HEAD
-from random import randint
-
-=======
 import random
->>>>>>> 2c59fbb0a055c298d6ae95a2e755ac01bcc0c063
+
 
 def create_app():
     instance_path = path.join(
