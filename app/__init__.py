@@ -11,7 +11,7 @@ def create_app():
 
     @app.route("/victor1")
     def zelda():
-        return "It's dangerous to go alone! Take This O---{:::::::::::::::>"
+        return "It's dangerous to go alone! Take This 8===>"
 
     @app.route("/danilogs")
     def hello_danilo():
