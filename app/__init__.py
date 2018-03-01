@@ -9,4 +9,8 @@ def create_app():
     def hello():
         return "Hello World! pyntonistas222"
 
+    @app.route("/danilogs")
+    def hello_danilo():
+        return "Hello world! by danilogs"
+
     return app
