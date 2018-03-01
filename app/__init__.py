@@ -43,7 +43,7 @@ def create_app():
             "I'm out of ideas already",
             "Still writing something"
         ]
-        return render_template("template_danilo", msg=msg[randint(0, len(msg)-1)])
+        return render_template("template_danilo", msg=msg[random.randint(0, len(msg)-1)])
 
     @app.route("/atosfm")
     def hello_atos():
