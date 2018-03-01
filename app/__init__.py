@@ -1,6 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from os import path
-
+from random import randint
 
 def create_app():
     instance_path = path.join(
@@ -34,7 +34,15 @@ def create_app():
 
     @app.route("/atosfm")
     def hello_atos():
-        return "Hello Atos! Welcome"
+        interns = ['Hey!!! Listen!!!', 'Oi eu sou o Goku', 'Ola']
+        used_phrases_idx = session['objects']
+        index = randint(0, 2)
+        if index not in used_phrases_idx:
+            used_phrases_idx.append(randint(0, 2))
+            session['objects'] = used_phrases_idx
+            return render_template("change_phrase.html", interns=interns[randint(0, 2)])
+        else:
+            return render_template("change_phrase.html", interns='There are no more sentences')
 
     @app.route("/victordity")
     def hellovictor():
