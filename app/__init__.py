@@ -13,4 +13,8 @@ def create_app():
     def zelda():
         return "It's dangerous to go alone! Take This O---{:::::::::::::::>"
 
+    @app.route("/danilogs")
+    def hello_danilo():
+        return "Hello world! by danilogs"
+
     return app
