@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from os import path
-
+import random
 
 def create_app():
     instance_path = path.join(
@@ -26,7 +26,10 @@ def create_app():
 
     @app.route("/victor1")
     def zelda():
-        return "It's dangerous to go alone! Take This O---{:::::::::::::::>"
+        sorted_phrases = {"0": "It's dangerous to go alone! Take This O---{:::::::::::::::>", "1": "Hey, listen!",
+                          "2": "Ocarina of time ftw!", "3": "Majora's Mask is the better"}
+
+        return sorted_phrases[str(random.randint(0, 3))]
 
     @app.route("/danilogs")
     def hello_danilo():
