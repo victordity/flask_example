@@ -13,4 +13,8 @@ def create_app():
     def hello_danilo():
         return "Hello world! by danilogs"
 
+    @app.route("/atosfm")
+    def hello_atos():
+        return "Hello Atos! Welcome"
+    
     return app
