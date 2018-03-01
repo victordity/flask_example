@@ -10,7 +10,7 @@
     <div class="container">
         <h1>Acorsi's Dream Team <i style="color: yellow;" class="fas fa-star"></i></h1>
         <ul>
-            {% for intern, url in interns %}
+            {% for intern, url in session.interns %}
                 <li>
                     <a href="{{url}}"><span style="font-size: 25px; color: black;">{{intern}}</span></a>
                 </li>

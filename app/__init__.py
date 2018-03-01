@@ -1,6 +1,8 @@
-from flask import Flask, render_template
-from os import path
 import random
+from os import path
+
+from flask import Flask, render_template, session
+
 
 def create_app():
     instance_path = path.join(
@@ -16,24 +18,33 @@ def create_app():
 
     @app.route("/")
     def hello():
-        interns = [
+        session['interns'] = [
             ("Victor1", "/victor1"),
             ("Danilo", "/danilogs"),
             ("Atos", "/atosfm"),
             ("Victor2", "/victordity")
         ]
-        return render_template("index.html", interns=interns)
+        return render_template("index.html")
 
     @app.route("/victor1")
     def zelda():
-        sorted_phrases = {"0": "It's dangerous to go alone! Take This O---{:::::::::::::::>", "1": "Hey, listen!",
-                          "2": "Ocarina of time ftw!", "3": "Majora's Mask is the better"}
+        sorted_phrases = {"0": "It's dangerous to go alone! Take This 8=====D",
+                          "1": "Hey, listen!",
+                          "2": "Ocarina of time ftw!",
+                          "3": "Majora's Mask is the better"}
 
         return sorted_phrases[str(random.randint(0, 3))]
 
     @app.route("/danilogs")
     def hello_danilo():
-        return "Hello world! by danilogs"
+        msg = [
+            'Hello world by Danilo',
+            "Message 2",
+            "I'm out of ideas already",
+            "Still writing something"
+        ]
+        return render_template("template_danilo",
+                               msg=msg[random.randint(0, len(msg) - 1)])
 
     @app.route("/atosfm")
     def hello_atos():
@@ -42,14 +53,18 @@ def create_app():
     @app.route("/victordity")
     def hellovictor():
         from random import randint
-        from flask import session
-        mensagens = ["Mensagem 1", "Mensagem 2", "Mensagem 3", "Mensagem 4", "Mensagem 5"]
-        idx = randint(0, 4)
-        session.pop('username', None)
-        print(mensagens[idx])
+        mensagens = ["Mensagem 1", "Mensagem 2", "Mensagem 3", "Mensagem 4",
+                     "Mensagem 5"]
 
-        return render_template("victor2.html", mensagem = mensagens[idx])
+        idx = randint(0, 4)
+        session['mensagem_rand'] = mensagens
+
+        print(mensagens[idx])
+        if mensagens[idx] is not in session['mensagem_rand']:
+            session['mensagem_rand']
+        else:
+
+
+        return render_template("victor2.html", mensagem=mensagens[idx])
 
     return app
-
-
