@@ -20,5 +20,12 @@ def create_app():
     @app.route("/atosfm")
     def hello_atos():
         return "Hello Atos! Welcome"
-    
+
+    @app.route("/victordity")
+    def hellovictor():
+        return "Mensagem adicionada por Victor Hugo"
+
+
     return app
+
+
