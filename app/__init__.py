@@ -55,8 +55,12 @@ def create_app():
 
     @app.route("/victordity")
     def hellovictor():
-        return "Mensagem adicionada por Victor Hugo"
+        from random import randint
+        mensagens = ["Mensagem 1", "Mensagem 2", "Mensagem 3", "Mensagem 4", "Mensagem 5"]
+        idx = randint(0, 4)
+        print(mensagens[idx])
 
+        return render_template("victor2.html", mensagem = mensagens[idx])
 
     return app
 
