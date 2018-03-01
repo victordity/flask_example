@@ -9,6 +9,10 @@ def create_app():
     def hello():
         return "Hello World! pyntonistas222"
 
+    @app.route("/victor1")
+    def zelda():
+        return "It's dangerous to go alone! Take This O---{:::::::::::::::>"
+
     @app.route("/danilogs")
     def hello_danilo():
         return "Hello world! by danilogs"
