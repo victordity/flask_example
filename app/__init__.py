@@ -1,4 +1,11 @@
-from user_victor2 import User
+import random
+from os import path
+
+from flask import Flask, render_template, session, request, redirect
+from app.models.user_victor2 import User
+
+from app.modules.utils import logged
+
 
 def create_app():
     instance_path = path.join(
@@ -85,10 +92,13 @@ def create_app():
         print(request.form)
         return "cadastrado"
 
-    @app.route("/cad_user", methods=["POST", "GET"])
+    @app.route("/cad_user_victor2", methods=["POST", "GET"])
     def cad_user_victor2():
-        usuario = User("victor", "victor@ciandt.com")
-        print(request.form)
-        session['usuario'] = usuario
-        return "cadastrado"
+
+        usuario = User(request.form.get('name'), request.form.get('email'))
+
+        session['user'] = usuario.__dict__
+
+
+        return redirect('user')
     return app
