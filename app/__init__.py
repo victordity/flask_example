@@ -1,10 +1,10 @@
 import random
 from os import path
 
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, redirect
 
 from app.modules.utils import logged
-
+from app.models.user_danilogs import User
 
 def create_app():
     instance_path = path.join(
@@ -79,6 +79,16 @@ def create_app():
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
         print(request.form)
-        return "cadastrado"
+        return "registered"
 
+    @app.route("/cad_user_danilogs", methods=["POST", "GET"])
+    def cad_user_danilogs():
+
+        if "user" not in session:
+            session["user"] = [[]]
+
+        created_user = User(request.form.get('nome'), request.form.get('email'))
+        session["user"].append([created_user.name, created_user.email])
+
+        return redirect("/user")
     return app
