@@ -2,11 +2,13 @@ import random
 from os import path
 
 from flask import Flask, render_template, session, request, redirect, jsonify
+from app.models.user_victor2 import User
 
-from app.models.user import User as UserMain
 from app.models.user_danilogs import User
+from models import user_atos
 from app.models.user_victor import UserVictor
 from app.modules.utils import logged
+from app.models.user import User as UserMain
 
 
 def create_app():
@@ -58,15 +60,34 @@ def create_app():
 
     @app.route("/atosfm")
     def hello_atos():
-        return "Hello Atos! Welcome"
+        interns = ['M1', 'M2', 'M3']
+        if 'used_sentences' not in session:
+            session['used_sentences'] = interns
+        index = randint(0, 2)
+        try:
+            session['used_sentences'].pop(index)
+            return render_template("change_phrase.html", interns=interns[randint(0, 2)])
+        except Exception :
+            return render_template("change_phrase.html", interns='There are no more sentences')
+
 
     @app.route("/victordity")
     def hellovictor():
         from random import randint
         mensagens = ["Mensagem 1", "Mensagem 2", "Mensagem 3", "Mensagem 4",
                      "Mensagem 5"]
+
         idx = randint(0, 4)
-        print(mensagens[idx])
+
+
+       # print(mensagens[idx])
+       # if session == None:
+       #     session['mensagem_rand'] = mensagens
+       # elif mensagens[idx] not in session['mensagem_rand']:
+       #     session['mensagem_rand'] = mensagens[idx]
+       #     session['mensagem_rand']
+       # else:
+
 
         return render_template("victor2.html", mensagem=mensagens[idx])
 
@@ -83,6 +104,8 @@ def create_app():
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
+        print(request.form)
+        return "registered"
         if not all([request.form.get(i) for i in ['nome', 'email']]):
             return "Parametros invalidos"
 
@@ -114,6 +137,28 @@ def create_app():
 
         return redirect("user")
 
+    @app.route("/cad_user_victor2", methods=["POST", "GET"])
+    def cad_user_victor2():
+
+        usuario = User(request.form.get('name'), request.form.get('email'))
+
+        session['user'] = usuario.__dict__
+
+
+    @app.route("/cad_user_atos", methods=["POST", "GET"])
+    def cad_user_atos():
+
+        if 'user' not in session:
+            new_user = user_atos.User(request.form.get('nome'),request.form.get('email'))
+            session['user'] = new_user.__dict__
+            print session['user']
+        else:
+            new_user =session['user']
+            if (not new_user.get('nome')):
+                new_user = user_atos.User(request.form.get('nome'),request.form.get('email'))
+                session['user'] =new_user.__dict__
+
+        return redirect('user')
     @app.route("/list_user", methods=["GET"])
     def list_user():
         logged_user = UserMain(**session['user'])
