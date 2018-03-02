@@ -1,12 +1,17 @@
 from random import randint
 import random
-from os import path
 
-from flask import Flask, render_template, session, request, redirect
+from models.user_atos import User
+import json
+from os import path
+from flask import Flask, render_template, session, request, redirect, url_for
 
 from app.modules.utils import logged
-from models.user import User
-import json
+
+from app.models.user_victor import UserVictor
+from app.models.user_danilogs import User
+from models.user_atos import User
+
 def create_app():
     instance_path = path.join(
         path.abspath(path.dirname(__file__))
@@ -84,12 +89,33 @@ def create_app():
     @app.route("/user")
     @logged
     def user():
-        return "Logged"
+        return session['user']
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
         print(request.form)
-        return "cadastrado"
+        return "registered"
+
+    @app.route("/cad_user_danilogs", methods=["POST", "GET"])
+    def cad_user_danilogs():
+
+        if "user" not in session:
+            session["user"] = [[]]
+
+        created_user = User(request.form.get('nome'), request.form.get('email'))
+        session["user"].append([created_user.name, created_user.email])
+
+        return redirect("/user")
+
+
+    @app.route("/cad_user_victor1", methods=["POST", "GET"])
+    def cad_user_victor1():
+        new_user = UserVictor(request.form.get('nome'), request.form.get('email'))
+
+        session['user'] = new_user.toJSON()
+
+        return redirect("user")
+
 
     @app.route("/cad_user_atos", methods=["POST", "GET"])
     def cad_user_atos():
