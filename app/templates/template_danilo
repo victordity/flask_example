@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minha página</title>
+</head>
+<body>
+    <ul>
+        {{msg}}
+    </ul>
+</body>
+</html>
