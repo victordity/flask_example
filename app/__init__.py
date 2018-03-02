@@ -2,9 +2,15 @@ import random
 from os import path
 
 from flask import Flask, render_template, session, request, redirect
+<<<<<<< HEAD
 from app.models.user_victor2 import User
+=======
+>>>>>>> cd78ad346621cd1dd395d98c432cc97b4eef97a7
 
+from app.models.user_danilogs import User
+from app.models.user_victor import UserVictor
 from app.modules.utils import logged
+from app.models.user import User as UserMain
 
 
 def create_app():
@@ -80,17 +86,47 @@ def create_app():
 
     @app.route("/login", methods=['GET', 'POST'])
     def login():
+        session.clear()
         return render_template('login.html')
 
     @app.route("/user")
     @logged
     def user():
-        return "Logged"
+        logged_user = UserMain(**session['user'])
+        return str(logged_user)
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
-        print(request.form)
-        return "cadastrado"
+        if not all([request.form.get(i) for i in ['nome', 'email']]):
+            return "Parametros invalidos"
+
+        if 'user' not in session:
+            name = request.form.get("nome")
+            email = request.form.get("email")
+            new_user = UserMain(name, email)
+            session['user'] = new_user.__dict__
+        return redirect('user')
+
+    @app.route("/cad_user_danilogs", methods=["POST", "GET"])
+    def cad_user_danilogs():
+
+        if "user" not in session:
+            session["user"] = [[]]
+
+        created_user = User(request.form.get('nome'),
+                            request.form.get('email'))
+        session["user"].append([created_user.name, created_user.email])
+
+        return redirect("/user")
+
+    @app.route("/cad_user_victor1", methods=["POST", "GET"])
+    def cad_user_victor1():
+        new_user = UserVictor(request.form.get('nome'),
+                              request.form.get('email'))
+
+        session['user'] = new_user.toJSON()
+
+        return redirect("user")
 
     @app.route("/cad_user_victor2", methods=["POST", "GET"])
     def cad_user_victor2():
