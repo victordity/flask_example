@@ -1,10 +1,20 @@
 import random
+
 from os import path
 
+<<<<<<< HEAD
 from flask import Flask, render_template, session, request, redirect
 
 from app.modules.utils import logged
 from app.models.user_danilogs import User
+=======
+from flask import Flask, render_template, session, request, redirect, url_for
+
+from app.modules.utils import logged
+
+from app.models.user_victor import UserVictor
+
+>>>>>>> 39926dcb09e11a266d3f811e3c0a3a4e6f91f04b
 
 def create_app():
     instance_path = path.join(
@@ -74,12 +84,12 @@ def create_app():
     @app.route("/user")
     @logged
     def user():
-        return "Logged"
+        return session['user']
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
         print(request.form)
-        return "registered"
+    return "registered"
 
     @app.route("/cad_user_danilogs", methods=["POST", "GET"])
     def cad_user_danilogs():
@@ -91,4 +101,15 @@ def create_app():
         session["user"].append([created_user.name, created_user.email])
 
         return redirect("/user")
+
+
+    @app.route("/cad_user_victor1", methods=["POST", "GET"])
+    def cad_user_victor1():
+        new_user = UserVictor(request.form.get('nome'), request.form.get('email'))
+
+        session['user'] = new_user.toJSON()
+
+        return redirect("user")
+
+
     return app
