@@ -1,9 +1,12 @@
 import random
+
 from os import path
 
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, redirect, url_for
 
 from app.modules.utils import logged
+
+from app.models.user_victor import UserVictor
 
 
 def create_app():
@@ -74,11 +77,18 @@ def create_app():
     @app.route("/user")
     @logged
     def user():
-        return "Logged"
+        return session['user']
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
-        print(request.form)
         return "cadastrado"
+
+    @app.route("/cad_user_victor1", methods=["POST", "GET"])
+    def cad_user_victor1():
+        new_user = UserVictor(request.form.get('nome'), request.form.get('email'))
+
+        session['user'] = new_user.toJSON()
+
+        return redirect("user")
 
     return app
