@@ -1,20 +1,12 @@
 import random
 
 from os import path
-
-<<<<<<< HEAD
-from flask import Flask, render_template, session, request, redirect
-
-from app.modules.utils import logged
-from app.models.user_danilogs import User
-=======
 from flask import Flask, render_template, session, request, redirect, url_for
 
 from app.modules.utils import logged
 
 from app.models.user_victor import UserVictor
-
->>>>>>> 39926dcb09e11a266d3f811e3c0a3a4e6f91f04b
+from app.models.user_danilogs import User
 
 def create_app():
     instance_path = path.join(
