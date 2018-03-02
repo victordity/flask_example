@@ -1,7 +1,9 @@
 import random
 from os import path
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
+
+from app.modules.utils import logged
 
 
 def create_app():
@@ -44,7 +46,9 @@ def create_app():
                 "I'm out of ideas already",
                 "Still writing something"
             ]
-        popped = session['messages'].pop(random.randint(0, len(session['messages'])-1))
+        popped = session['messages'].pop(
+            random.randint(0, 1)
+        )
         print "test"
         print session
         return render_template("template_danilo", msg=popped)
@@ -62,5 +66,19 @@ def create_app():
         print(mensagens[idx])
 
         return render_template("victor2.html", mensagem=mensagens[idx])
+
+    @app.route("/login", methods=['GET', 'POST'])
+    def login():
+        return render_template('login.html')
+
+    @app.route("/user")
+    @logged
+    def user():
+        return "Logged"
+
+    @app.route("/cad_user", methods=["POST", "GET"])
+    def cad_user():
+        print(request.form)
+        return "cadastrado"
 
     return app
