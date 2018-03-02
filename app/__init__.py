@@ -1,13 +1,12 @@
-from flask import Flask, render_template, session
-from os import path
 from random import randint
 import random
 from os import path
 
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, redirect
 
 from app.modules.utils import logged
-
+from models.user import User
+import json
 def create_app():
     instance_path = path.join(
         path.abspath(path.dirname(__file__))
@@ -91,5 +90,19 @@ def create_app():
     def cad_user():
         print(request.form)
         return "cadastrado"
+
+    @app.route("/cad_user_atos", methods=["POST", "GET"])
+    def cad_user_atos():
+
+        if 'user' not in session:
+            new_user = User(request.form.get('nome'),request.form.get('email'))
+            session['user'] = new_user.serialize()
+            print session['user']
+        else:
+            new_user = json.loads(session['user'])
+            if (not new_user.get('nome')):
+                new_user = User(request.form.get('nome'),request.form.get('email'))
+                session['user'] = json.dumps(new_user.__dict__)
+        return redirect('user')
 
     return app
