@@ -4,7 +4,9 @@ from random import randint
 import random
 from os import path
 
-from flask import Flask, render_template, session
+from flask import Flask, render_template, session, request
+
+from app.modules.utils import logged
 
 def create_app():
     instance_path = path.join(
@@ -39,14 +41,19 @@ def create_app():
 
     @app.route("/danilogs")
     def hello_danilo():
-        msg = [
-            'Hello world by Danilo',
-            "Message 2",
-            "I'm out of ideas already",
-            "Still writing something"
-        ]
-        return render_template("template_danilo",
-                               msg=msg[random.randint(0, len(msg) - 1)])
+        if 'messages' not in session:
+            session["messages"] = [
+                'Hello world by Danilo',
+                "Message 2",
+                "I'm out of ideas already",
+                "Still writing something"
+            ]
+        popped = session['messages'].pop(
+            random.randint(0, 1)
+        )
+        print "test"
+        print session
+        return render_template("template_danilo", msg=popped)
 
     @app.route("/atosfm")
     def hello_atos():
@@ -70,5 +77,19 @@ def create_app():
         print(mensagens[idx])
 
         return render_template("victor2.html", mensagem=mensagens[idx])
+
+    @app.route("/login", methods=['GET', 'POST'])
+    def login():
+        return render_template('login.html')
+
+    @app.route("/user")
+    @logged
+    def user():
+        return "Logged"
+
+    @app.route("/cad_user", methods=["POST", "GET"])
+    def cad_user():
+        print(request.form)
+        return "cadastrado"
 
     return app
