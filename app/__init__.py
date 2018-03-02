@@ -1,12 +1,12 @@
 import random
 from os import path
 
-from flask import Flask, render_template, session, request, redirect
+from flask import Flask, render_template, session, request, redirect, jsonify
 
+from app.models.user import User as UserMain
 from app.models.user_danilogs import User
 from app.models.user_victor import UserVictor
 from app.modules.utils import logged
-from app.models.user import User as UserMain
 
 
 def create_app():
@@ -113,5 +113,13 @@ def create_app():
         session['user'] = new_user.toJSON()
 
         return redirect("user")
+
+    @app.route("/list_user", methods=["GET"])
+    def list_user():
+        logged_user = UserMain(**session['user'])
+        return jsonify({
+            'data': logged_user.__dict__,
+            'resp': True
+        })
 
     return app
