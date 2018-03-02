@@ -37,14 +37,17 @@ def create_app():
 
     @app.route("/danilogs")
     def hello_danilo():
-        msg = [
-            'Hello world by Danilo',
-            "Message 2",
-            "I'm out of ideas already",
-            "Still writing something"
-        ]
-        return render_template("template_danilo",
-                               msg=msg[random.randint(0, len(msg) - 1)])
+        if 'messages' not in session:
+            session["messages"] = [
+                'Hello world by Danilo',
+                "Message 2",
+                "I'm out of ideas already",
+                "Still writing something"
+            ]
+        popped = session['messages'].pop(random.randint(0, len(session['messages'])-1))
+        print "test"
+        print session
+        return render_template("template_danilo", msg=popped)
 
     @app.route("/atosfm")
     def hello_atos():
