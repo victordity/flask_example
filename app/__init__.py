@@ -3,14 +3,18 @@ import random
 
 from models.user_atos import User
 import json
+
 from os import path
-from flask import Flask, render_template, session, request, redirect, url_for
 
-from app.modules.utils import logged
+from flask import Flask, render_template, session, request, redirect
+from app.models.user_victor2 import User
 
-from app.models.user_victor import UserVictor
 from app.models.user_danilogs import User
-from models.user_atos import User
+from models import user_atos
+from app.models.user_victor import UserVictor
+from app.modules.utils import logged
+from app.models.user import User as UserMain
+
 
 def create_app():
     instance_path = path.join(
@@ -77,24 +81,45 @@ def create_app():
         from random import randint
         mensagens = ["Mensagem 1", "Mensagem 2", "Mensagem 3", "Mensagem 4",
                      "Mensagem 5"]
+
         idx = randint(0, 4)
-        print(mensagens[idx])
+
+
+       # print(mensagens[idx])
+       # if session == None:
+       #     session['mensagem_rand'] = mensagens
+       # elif mensagens[idx] not in session['mensagem_rand']:
+       #     session['mensagem_rand'] = mensagens[idx]
+       #     session['mensagem_rand']
+       # else:
+
 
         return render_template("victor2.html", mensagem=mensagens[idx])
 
     @app.route("/login", methods=['GET', 'POST'])
     def login():
+        session.clear()
         return render_template('login.html')
 
     @app.route("/user")
     @logged
     def user():
-        return session['user']
+        logged_user = UserMain(**session['user'])
+        return str(logged_user)
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
         print(request.form)
         return "registered"
+        if not all([request.form.get(i) for i in ['nome', 'email']]):
+            return "Parametros invalidos"
+
+        if 'user' not in session:
+            name = request.form.get("nome")
+            email = request.form.get("email")
+            new_user = UserMain(name, email)
+            session['user'] = new_user.__dict__
+        return redirect('user')
 
     @app.route("/cad_user_danilogs", methods=["POST", "GET"])
     def cad_user_danilogs():
@@ -102,33 +127,41 @@ def create_app():
         if "user" not in session:
             session["user"] = [[]]
 
-        created_user = User(request.form.get('nome'), request.form.get('email'))
+        created_user = User(request.form.get('nome'),
+                            request.form.get('email'))
         session["user"].append([created_user.name, created_user.email])
 
         return redirect("/user")
 
-
     @app.route("/cad_user_victor1", methods=["POST", "GET"])
     def cad_user_victor1():
-        new_user = UserVictor(request.form.get('nome'), request.form.get('email'))
+        new_user = UserVictor(request.form.get('nome'),
+                              request.form.get('email'))
 
         session['user'] = new_user.toJSON()
 
         return redirect("user")
+
+    @app.route("/cad_user_victor2", methods=["POST", "GET"])
+    def cad_user_victor2():
+
+        usuario = User(request.form.get('name'), request.form.get('email'))
+
+        session['user'] = usuario.__dict__
 
 
     @app.route("/cad_user_atos", methods=["POST", "GET"])
     def cad_user_atos():
 
         if 'user' not in session:
-            new_user = User(request.form.get('nome'),request.form.get('email'))
-            session['user'] = new_user.serialize()
+            new_user = user_atos.User(request.form.get('nome'),request.form.get('email'))
+            session['user'] = new_user.__dict__
             print session['user']
         else:
-            new_user = json.loads(session['user'])
+            new_user =session['user']
             if (not new_user.get('nome')):
-                new_user = User(request.form.get('nome'),request.form.get('email'))
-                session['user'] = json.dumps(new_user.__dict__)
-        return redirect('user')
+                new_user = user_atos.User(request.form.get('nome'),request.form.get('email'))
+                session['user'] =new_user.__dict__
 
+        return redirect('user')
     return app

@@ -7,11 +7,25 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
+
+    <form action="/cad_user_victor2" method="POST">
+        <ul style="list-style-type: none;">
+            <li>
+                Nome <input type="text" name="nome"/>
+            </li>
+            <li>
+                email <input type="text" name="email"/>
+            </li>
+            <li>
+                <input type="submit" value="Enviar"/>
+            </li>
+        </ul>
+    </form>
     {{ request.args.msg }}
 
     <div class="container" style="margin-top: 20px; width: 500px;">
         <h1>Cadastro de Usuário</h1>
-        <form action="/cad_user_atos" method="POST">
+        <form action="/cad_user" method="POST">
             <div class="form-group">
                 <label for="nomeInput">Nome</label>
                 <input type="text" class="form-control" name="nome" id="nomeInput" aria-describedby="nameHelp">
