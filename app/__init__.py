@@ -57,12 +57,15 @@ def create_app():
                      "Mensagem 5"]
 
         idx = randint(0, 4)
-        session['mensagem_rand'] = mensagens
 
-        print(mensagens[idx])
-        if mensagens[idx] is not in session['mensagem_rand']:
-            session['mensagem_rand']
-        else:
+
+       # print(mensagens[idx])
+       # if session == None:
+       #     session['mensagem_rand'] = mensagens
+       # elif mensagens[idx] not in session['mensagem_rand']:
+       #     session['mensagem_rand'] = mensagens[idx]
+       #     session['mensagem_rand']
+       # else:
 
 
         return render_template("victor2.html", mensagem=mensagens[idx])
