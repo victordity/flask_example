@@ -6,6 +6,7 @@ from flask import Flask, render_template, session, request, redirect
 from app.models.user_danilogs import User
 from app.models.user_victor import UserVictor
 from app.modules.utils import logged
+from app.models.user import User as UserMain
 
 
 def create_app():
@@ -71,17 +72,26 @@ def create_app():
 
     @app.route("/login", methods=['GET', 'POST'])
     def login():
+        session.clear()
         return render_template('login.html')
 
     @app.route("/user")
     @logged
     def user():
-        return session['user']
+        logged_user = UserMain(**session['user'])
+        return str(logged_user)
 
     @app.route("/cad_user", methods=["POST", "GET"])
     def cad_user():
-        print(request.form)
-        return "registered"
+        if not all([request.form.get(i) for i in ['nome', 'email']]):
+            return "Parametros invalidos"
+
+        if 'user' not in session:
+            name = request.form.get("nome")
+            email = request.form.get("email")
+            new_user = UserMain(name, email)
+            session['user'] = new_user.__dict__
+        return redirect('user')
 
     @app.route("/cad_user_danilogs", methods=["POST", "GET"])
     def cad_user_danilogs():
